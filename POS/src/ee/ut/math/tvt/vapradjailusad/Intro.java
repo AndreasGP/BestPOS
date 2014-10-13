@@ -1,6 +1,10 @@
 package ee.ut.math.tvt.vapradjailusad;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -10,9 +14,11 @@ import org.apache.log4j.PropertyConfigurator;
 public class Intro {
 
 	private static final Logger log = Logger.getLogger(Intro.class);
+
 	
 	public static void main(String[] args) {
 		PropertyConfigurator.configure("etc/log4j.properties");
+		
 		
 		
 		IntroUI ui = new IntroUI();

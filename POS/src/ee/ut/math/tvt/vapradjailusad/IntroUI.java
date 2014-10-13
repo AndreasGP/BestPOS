@@ -8,6 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -25,7 +28,13 @@ import javax.swing.JTextArea;
 public class IntroUI {
 	
 	JFrame raam = new JFrame("BestPos");
+	Properties applicationProps = new Properties(); 
+	Properties versionProps = new Properties();
 	
+	
+        
+        
+
 	 public IntroUI() {
 	        
 		 	raam.setSize(640, 480);
@@ -44,17 +53,19 @@ public class IntroUI {
 	        JLabel memberLabel = new JLabel("Team members:");        	    	        
 	        JLabel membersLabel = new JLabel();        
 	        
-	        
-	        try(BufferedReader br = new BufferedReader(new FileReader("application.properties"))) {
-	            nameLabel.setText(br.readLine());
-	            leaderLabel.setText(br.readLine());
-	            emailLabel.setText(br.readLine());
-	            membersLabel.setText(br.readLine());
-	        } catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	        	InputStream inputStream = this.getClass().getClassLoader()
+	        	        .getResourceAsStream("application.properties");
+	        	try {
+					applicationProps.load(inputStream);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	        	nameLabel.setText(applicationProps.getProperty("name"));
+	        	leaderLabel.setText(applicationProps.getProperty("leader"));
+	        	emailLabel.setText(applicationProps.getProperty("leadermail"));
+	        	membersLabel.setText(applicationProps.getProperty("members"));
+	            
 	        
 	        panel.add(nameLabel);
 	        panel.add(Box.createRigidArea(new Dimension(0,10)));
@@ -70,7 +81,7 @@ public class IntroUI {
 	        //Logo
 	        BufferedImage logo;
 			try {
-				logo = ImageIO.read(new File("assets/logo.jpg"));
+				logo = ImageIO.read(getClass().getResource("/assets/logo.jpg"));				
 				 JLabel picLabel = new JLabel(new ImageIcon(logo));
 				 panel.add(picLabel);
 			} catch (IOException e) {
@@ -78,22 +89,18 @@ public class IntroUI {
 			}
 			
 			//Version		
-			JLabel versionLabel = new JLabel();        
-	        
-	        try(BufferedReader br = new BufferedReader(new FileReader("version.properties"))) {
-	            String line = br.readLine();
-	            while (line != null) { 
-	            	if(line.length()>3) {
-	                	versionLabel.setText(line);
-	                }
-	                line = br.readLine();
-	                
-	            }
-	        } catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			JLabel versionLabel = new JLabel(); 
+			
+			InputStream inputStream2 = this.getClass().getClassLoader()
+        	        .getResourceAsStream("version.properties");
+        	try {
+				versionProps.load(inputStream2);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
+	        
+        	versionLabel.setText(versionProps.getProperty("build.number"));
 	        
 	        panel.add(versionLabel);
 	       
