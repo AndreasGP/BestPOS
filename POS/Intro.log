@@ -12,3 +12,10 @@
 2014-10-13 12:39:28 INFO  Intro:26 - Intro started
 2014-10-13 12:40:09 INFO  Intro:26 - Intro started
 2014-10-13 13:53:15 INFO  Intro:26 - Intro started
+2014-10-13 20:58:54 INFO  Intro:26 - Intro started
+2014-10-15 12:16:13 INFO  Intro:26 - Intro started
+2014-10-15 12:30:50 INFO  Intro:55 - Intro started
+2014-10-15 12:30:59 INFO  PurchaseTab:146 - New sale process started
+2014-10-15 12:31:01 INFO  PurchaseTab:171 - Sale complete
+2014-10-15 12:31:01 ERROR PurchaseTab:180 - Underaged!
+2014-10-15 12:31:01 INFO  PurchaseTab:158 - Sale cancelled

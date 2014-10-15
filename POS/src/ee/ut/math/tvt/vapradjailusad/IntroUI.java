@@ -25,9 +25,8 @@ import javax.swing.JTextArea;
 
 
 
-public class IntroUI {
+public class IntroUI extends JFrame {
 	
-	JFrame raam = new JFrame("BestPos");
 	Properties applicationProps = new Properties(); 
 	Properties versionProps = new Properties();
 	
@@ -37,7 +36,7 @@ public class IntroUI {
 
 	 public IntroUI() {
 	        
-		 	raam.setSize(640, 480);
+		 	setSize(640, 480);
 		 	
 		 	
 		 	JPanel panel = new JPanel();
@@ -106,12 +105,7 @@ public class IntroUI {
 	       
 	       
 
-	        raam.add(panel);
-	        raam.setVisible(true);
-
-	       
-
-	        raam.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        add(panel);
 	    }
 	
 }
