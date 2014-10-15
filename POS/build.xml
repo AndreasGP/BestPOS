@@ -137,7 +137,7 @@
 		
 		<git command="push" >
 			<args>
-				<arg value="https://${git_username}:${git_password}@github.com/AndreasGP/BestPOS.git"/>
+				<arg value="https://${git_username}:${git_password}@github.com/AndreasGP/BestPOS/tree.git"/>
 			</args>
 		</git>
 	</target>
