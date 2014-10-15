@@ -142,6 +142,30 @@
 		</git>
 	</target>
   
+  <target name="git_tag" description="Creates tag for git">
+      
+		<input message="Tag name" addproperty="name" />
+		<input message="Comment" addproperty="comment" />
+		<input message="Github username" addproperty="username" />
+		<input message="Github password" addproperty="password" />
+		
+		<echo message="Adding tag '${name}'" />
+		
+		<git command="tag">
+			<args>
+				<arg value="-a" />
+				<arg value="${name}" />
+				<arg value="-m ${comment}" />
+			</args>
+		</git>
+		
+		<git command="push" >
+			<args>
+				<arg value="--tags" />
+				<arg value="https://${username}:${password}@github.com/AndreasGP/BestPOS.git"/>
+			</args>
+		</git>
+	</target>
 
   <target name="clean"
         description="clean up" >
