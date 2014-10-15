@@ -15,7 +15,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
 
 	public StockTableModel() {
-		super(new String[] {"Id", "Name", "Price", "Quantity"});
+		super(new String[] {"Id", "Name", "Price", "Quantity", "Sum"});
 	}
 
 	@Override
@@ -29,6 +29,8 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 			return item.getPrice();
 		case 3:
 			return item.getQuantity();
+		case 4:
+			return item.getPrice() * item.getQuantity();
 		}
 		throw new IllegalArgumentException("Column index out of range");
 	}

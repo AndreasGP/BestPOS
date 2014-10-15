@@ -19,3 +19,5 @@
 2014-10-15 12:31:01 INFO  PurchaseTab:171 - Sale complete
 2014-10-15 12:31:01 ERROR PurchaseTab:180 - Underaged!
 2014-10-15 12:31:01 INFO  PurchaseTab:158 - Sale cancelled
+2014-10-15 13:35:38 INFO  PurchaseTab:146 - New sale process started
+2014-10-15 13:35:38 INFO  Intro:54 - Intro started
