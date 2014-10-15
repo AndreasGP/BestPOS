@@ -101,8 +101,46 @@
 	</java>
 </target>
 
+<macrodef name = "git">
+    <attribute name = "command" />
+    <attribute name = "dir" default = "" />
+    <element name = "args" optional = "true" />
+    <sequential>
+        <echo message = "git @{command}" />
+        <exec executable = "git" dir = "@{dir}">
+            <arg value = "@{command}" />
+            <args/>
+        </exec>
+    </sequential>
+</macrodef>
 
-  
+
+  <target name="git_commit" description="Commit and push">      
+		
+		<input message="Github username" addproperty="git_username" />
+		<input message="Github password" addproperty="git_password"/>
+		<input message="Message" addproperty="Message" />
+		
+		<echo message="Commiting  ${commit-message}" />
+		
+		<git command="add">
+			<args>
+				<arg value="-A" />
+			</args>
+		</git>
+		
+		<git command="commit">
+			<args>
+				<arg value="-m ${message}" />
+			</args>
+		</git>
+		
+		<git command="push" >
+			<args>
+				<arg value="https://${git_username}:${git_password}@github.com/AndreasGP/BestPOS.git"/>
+			</args>
+		</git>
+	</target>
   
 
   <target name="clean"
