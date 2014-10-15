@@ -5,41 +5,149 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
+    <property name="version.properties" value="build/version.properties" />
     
     <path id="POS.classpath">
-        <pathelement location="bin"/>
-        <pathelement location="lib/log4j-1.2.17.jar"/>
+        <fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
     </path>
     
+    <path id="test.classpath">
+		<pathelement location="build"/>
+		<!-- configuration -->
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
     
+    
+    	<target name="build" description="Build the system">
+		<mkdir dir="build"/>
+		<copy todir="build">
+   		 <fileset dir=""
+             includes="**/*.properties,**/*.jpg,**/*.jar" excludes="**build/**" />
 
-    <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}"/>
-  </target>
+		</copy>
+		<javac
+            srcdir="src"
+            destdir="build"
+            debug="true"
+            debuglevel="lines,vars,source"
+            encoding="utf-8"
+            compiler="modern"
+            target="1.7"
+            source="1.7"
+			includeantruntime="false">
+			<classpath refid="POS.classpath"/>
+		</javac>
+		
 
-  <target name="compile" depends="init"
-        description="compile the source " >
-    <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}"/>
-  </target>
-
-  <target name="dist" depends="compile"
+	</target>
+   
+ 
+  
+  
+  <target name="dist" depends="build"
         description="generate the distribution" >
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
-
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/MyProject-${DSTAMP}.jar" basedir="${build}"/>
+    
+      <propertyfile
+    file="build/version.properties">
+  <entry key="build.revision.number" type="int" default="0" operation="+"/>
+  </propertyfile>
+  
+      <property file="${version.properties}" />
+    <propertyfile
+   file="build/version.properties">
+  <entry key="build.number" value="${build.major.number}.${build.minor.number}.${build.revision.number}" />
+	</propertyfile>
+	
+       <delete dir="build/jar"/>
+    <jar jarfile="build/jar/vapradjailusad.jar">
+        
+     <fileset dir="build/"/>
+     
+     <restrict>
+     <name name="**/*.class"/>
+     <archives>
+       <zips>
+         <fileset dir="lib" includes="**/*.jar"/>
+       </zips>
+     </archives>
+    </restrict>
+    <manifest>
+      <attribute name="Main-Class"
+            value="ee.ut.math.tvt.vapradjailusad.Intro"/>
+    </manifest>
+    
+  </jar>
+  
+    
   </target>
+  
+  <target name="run" depends="build">
+
+		<java classname="ee.ut.math.tvt.vapradjailusad.Intro" classpathref="test.classpath" fork="yes" />
+	</target>
+	
+  
+  <target name="jrun" depends="dist" description="">
+	    <java jar="build/jar/vapradjailusad.jar" fork="true"/>
+	</target>
+  
+<target name="runc" depends="build" description="Run the application (console)">
+	<java classname="ee.ut.math.tvt.vapradjailusad.Intro" classpathref="test.classpath" fork="yes">
+		<arg value="console" />
+	</java>
+</target>
+
+<macrodef name = "git">
+    <attribute name = "command" />
+    <attribute name = "dir" default = "" />
+    <element name = "args" optional = "true" />
+    <sequential>
+        <echo message = "git @{command}" />
+        <exec executable = "git" dir = "@{dir}">
+            <arg value = "@{command}" />
+            <args/>
+        </exec>
+    </sequential>
+</macrodef>
+
+
+  <target name="git_commit" description="Commit and push">      
+		
+		<input message="Github username" addproperty="git_username" />
+		<input message="Github password" addproperty="git_password"/>
+		<input message="Message" addproperty="Message" />
+		
+		<echo message="Commiting  ${commit-message}" />
+		
+		<git command="add">
+			<args>
+				<arg value="-A" />
+			</args>
+		</git>
+		
+		<git command="commit">
+			<args>
+				<arg value="-m ${message}" />
+			</args>
+		</git>
+		
+		<git command="push" >
+			<args>
+				<arg value="https://${git_username}:${git_password}@github.com/AndreasGP/BestPOS.git"/>
+			</args>
+		</git>
+	</target>
+  
 
   <target name="clean"
         description="clean up" >
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
-    <delete dir="${dist}"/>
+
+    <delete dir="build"/>
+
   </target>
     
 </project>
