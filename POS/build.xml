@@ -119,9 +119,9 @@
 		
 		<input message="Github username" addproperty="git_username" />
 		<input message="Github password" addproperty="git_password"/>
-		<input message="Message" addproperty="Message" />
+		<input message="Message" addproperty="message" />
 		
-		<echo message="Commiting  ${commit-message}" />
+		<echo message="Commiting  ${message}" />
 		
 		<git command="add">
 			<args>
