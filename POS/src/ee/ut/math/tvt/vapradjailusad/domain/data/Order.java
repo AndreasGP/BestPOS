@@ -33,4 +33,9 @@ public class Order implements DisplayableItem {
 	public List<SoldItem> getSoldItems() {
 		return soldItems;
 	}
+	
+	public int getPrice() {
+		//TODO
+		return 0;
+	}
 }
