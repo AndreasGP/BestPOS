@@ -5,12 +5,15 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,8 +32,9 @@ public class PurchaseItemPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
+    //Barcode combo box on the dialogPane
+    private JComboBox<String> barCodeComboBox;
     // Text field on the dialogPane
-    private JTextField barCodeField;
     private JTextField quantityField;
     private JTextField nameField;
     private JTextField priceField;
@@ -84,20 +88,21 @@ public class PurchaseItemPanel extends JPanel {
         panel.setBorder(BorderFactory.createTitledBorder("Product"));
 
         // Initialize the textfields
-        barCodeField = new JTextField();
         quantityField = new JTextField("1");
         nameField = new JTextField();
         priceField = new JTextField();
+        
+        // Create the barcode combobox
+        ComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>(getStockList());
+        barCodeComboBox = new JComboBox<String>(comboBoxModel);
 
-        // Fill the dialog fields if the bar code text field loses focus
-        barCodeField.addFocusListener(new FocusListener() {
-            public void focusGained(FocusEvent e) {
-            }
-
-            public void focusLost(FocusEvent e) {
-                fillDialogFields();
-            }
-        });
+        // Fill the dialog fields if an item is chosen in the combo box
+        barCodeComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fillDialogFields();
+			}
+		});
 
         nameField.setEditable(false);
         priceField.setEditable(false);
@@ -106,7 +111,7 @@ public class PurchaseItemPanel extends JPanel {
 
         // - bar code
         panel.add(new JLabel("Bar code:"));
-        panel.add(barCodeField);
+        panel.add(barCodeComboBox);
 
         // - amount
         panel.add(new JLabel("Amount:"));
@@ -132,6 +137,16 @@ public class PurchaseItemPanel extends JPanel {
 
         return panel;
     }
+    
+	/** Gets a list of the avaliable items as a string array */
+	private String[] getStockList() {
+		List<String> items = new ArrayList<String>();
+		for (StockItem item : model.getWarehouseTableModel().getTableRows()) {
+			items.add(item.getId() + ": " + item.getName());
+		}
+		String[] itemsArray = items.toArray(new String[items.size()]);
+		return itemsArray;
+	}
 
     // Fill dialog with data from the "database".
     public void fillDialogFields() {
@@ -146,12 +161,12 @@ public class PurchaseItemPanel extends JPanel {
         }
     }
 
-    // Search the warehouse for a StockItem with the bar code entered
-    // to the barCode textfield.
+    // Search the warehouse for a StockItem with the chosen ID in the barcode combobox.
     private StockItem getStockItemByBarcode() {
         try {
-            int code = Integer.parseInt(barCodeField.getText());
-            return model.getWarehouseTableModel().getItemById(code);
+        	StockItem item = model.getWarehouseTableModel().getTableRows().get(barCodeComboBox.getSelectedIndex());
+        	int code = item.getId().intValue();
+			return model.getWarehouseTableModel().getItemById(code);
         } catch (NumberFormatException ex) {
             return null;
         } catch (NoSuchElementException ex) {
@@ -183,7 +198,7 @@ public class PurchaseItemPanel extends JPanel {
     @Override
     public void setEnabled(boolean enabled) {
         this.addItemButton.setEnabled(enabled);
-        this.barCodeField.setEnabled(enabled);
+        this.barCodeComboBox.setEnabled(enabled);
         this.quantityField.setEnabled(enabled);
     }
 
@@ -191,7 +206,6 @@ public class PurchaseItemPanel extends JPanel {
      * Reset dialog fields.
      */
     public void reset() {
-        barCodeField.setText("");
         quantityField.setText("1");
         nameField.setText("");
         priceField.setText("");
