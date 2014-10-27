@@ -8,8 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.apache.log4j.Logger;
 
@@ -169,6 +177,7 @@ public class PurchaseTab {
   /** Event handler for the <code>submit purchase</code> event. */
   protected void submitPurchaseButtonClicked() {
     log.info("Sale complete");
+    confirmMessage();
     try {
       log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
       domainController.submitCurrentPurchase(
@@ -180,9 +189,76 @@ public class PurchaseTab {
       log.error(e1.getMessage());
     }
   }
+  
+  protected void confirmMessage() {
+	final float sum = calculateSum();
+	
+	final JTextField amount = new JTextField(5);
+	final JPanel panel = new JPanel();
+	panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+    panel.add(new JLabel("Total amount: " + sum + "\n"));
+    panel.add(new JLabel("Payment amount: "));
+    panel.add(amount);
+    final StringBuilder input = new StringBuilder();
+    input.append("0");
+    final JLabel changeAmount = new JLabel("Change amount: " + (Float.parseFloat(input.toString()) - sum));
+    amount.getDocument().addDocumentListener(new DocumentListener() {
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			insertUpdate(e);
+		}
 
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			try{
+            	if (Integer.parseInt(amount.getText())<=0){
+            		JOptionPane.showMessageDialog(new JFrame(), "Amount must be positive");
+            	}
+            	else {
+            		input.delete(0, input.length());
+            		input.append(amount.getText());
+            		changeAmount.setText("Change amount: " + (Float.parseFloat(input.toString()) - sum));
+            		panel.add(changeAmount);
+            	}
+            }
+            catch (NumberFormatException nfe) {
+            	nfe.printStackTrace();
+            	JOptionPane.showMessageDialog(new JFrame(), "Invalid number");
+            } 
+		}
 
-
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			insertUpdate(e);
+		}
+	});
+    panel.add(Box.createHorizontalStrut(15));
+    panel.add(changeAmount);
+    
+    JFrame frame = new JFrame();
+    String[] options = new String[2];
+    options[0] = new String("Accept");
+    options[1] = new String("Cancel");
+    int result = JOptionPane.showOptionDialog(frame.getContentPane(),panel,
+    		"Confirmation", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
+    System.out.println(result);
+    if (result == 0) {
+    	System.out.println("Accepted");
+    }
+    else {
+    	System.out.println("Cancelled");
+    }
+  }
+  
+  protected float calculateSum() {
+	  float sum = 0;
+		for (int i = 0; i < model.getCurrentPurchaseTableModel().getRowCount(); i++) {
+			sum += Float.parseFloat(model.getCurrentPurchaseTableModel().getValueAt(i, 4).toString());
+		}
+	return sum;
+  }
+  
   /* === Helper methods that bring the whole purchase-tab to a certain state
    *     when called.
    */
