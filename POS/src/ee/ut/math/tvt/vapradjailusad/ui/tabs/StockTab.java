@@ -23,6 +23,7 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.vapradjailusad.domain.data.StockItem;
+import ee.ut.math.tvt.vapradjailusad.ui.SalesSystemUI;
 import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
 
 
@@ -32,9 +33,12 @@ public class StockTab {
 
 	private JButton addItemButton;
 
-	private SalesSystemModel model;
+	private final SalesSystemModel model;
+	
+	private final SalesSystemUI salesSystem;
 
-	public StockTab(SalesSystemModel model) {
+	public StockTab(SalesSystemUI salesSystem, SalesSystemModel model) {
+		this.salesSystem = salesSystem;
 		this.model = model;
 	}
 
@@ -189,6 +193,8 @@ public class StockTab {
 
 				StockItem item = new StockItem(id, name, description, price, quantity);
 				model.getWarehouseTableModel().addItem(item);
+				
+				salesSystem.getPurchaseTab().updateBarcodes();
 			}
 		}
 		else {

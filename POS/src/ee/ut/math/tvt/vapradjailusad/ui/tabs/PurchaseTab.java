@@ -326,4 +326,8 @@ public class PurchaseTab {
     return gc;
   }
 
+  public void updateBarcodes() {
+	  purchasePane.updateBarcodes();
+  }
+  
 }

@@ -49,7 +49,7 @@ public class SalesSystemUI extends JFrame {
 
     // Create singleton instances of the tab classes
     historyTab = new HistoryTab(model);
-    stockTab = new StockTab(model);
+    stockTab = new StockTab(this, model);
     purchaseTab = new PurchaseTab(domainController, model);
 
     setTitle("Sales system");
@@ -89,6 +89,9 @@ public class SalesSystemUI extends JFrame {
     getContentPane().add(tabbedPane);
   }
 
+  public PurchaseTab getPurchaseTab() {
+	  return purchaseTab;
+  }
 }
 
 

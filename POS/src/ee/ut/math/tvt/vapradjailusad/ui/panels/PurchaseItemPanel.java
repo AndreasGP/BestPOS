@@ -277,4 +277,8 @@ public class PurchaseItemPanel extends JPanel {
         return gc;
     }
 
+    public void updateBarcodes() {
+    	ComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>(getStockList());
+    	barCodeComboBox.setModel(comboBoxModel);
+    }
 }
