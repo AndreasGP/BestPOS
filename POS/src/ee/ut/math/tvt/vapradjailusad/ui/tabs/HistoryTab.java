@@ -2,8 +2,12 @@ package ee.ut.math.tvt.vapradjailusad.ui.tabs;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.List;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -12,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import org.apache.log4j.Logger;
@@ -86,10 +91,24 @@ public class HistoryTab {
 	/** Shows the detailed view for the given row. */
 	private void showDetails(int row) {
 		Order order = model.getHistoryTableModel().getTableRows().get(row);
-		StringBuilder details = new StringBuilder();
-		for (SoldItem item : order.getSoldItems()) {
-			details.append(item.getStockItem().toString() + "\n");
-		}
-		JOptionPane.showMessageDialog(new JFrame(), details);
+		
+		String[][] values = new String[order.getSoldItems().size()][4];
+        int i=0;
+        for (SoldItem item : order.getSoldItems()) {
+            values[i][0]=item.getName();
+            values[i][1]=Double.toString(item.getPrice());
+            values[i][2]=Integer.toString(item.getQuantity());
+            values[i][3]=Double.toString(item.getPrice()*item.getQuantity());
+            
+            i++;
+        }
+		DefaultTableModel model = new DefaultTableModel(values, new Object[]{"Name", "Price", "Quantity", "Sum"});
+        JTable table = new JTable(model);
+        JScrollPane scrollpane = new JScrollPane(table);
+        Dimension d = table.getPreferredSize();
+        scrollpane.setPreferredSize(
+            new Dimension(d.width,d.height+30));
+        JOptionPane.showMessageDialog(null, scrollpane, "Order "+Integer.toString(row+1)+" details", JOptionPane.PLAIN_MESSAGE);
+		
 	}
 }
