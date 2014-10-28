@@ -25,6 +25,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 				((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime()),
 				goods
 				);
+		model.getWarehouseTableModel().decreaseItems(order);
 		model.getHistoryTableModel().addOrder(order);
 	}
 

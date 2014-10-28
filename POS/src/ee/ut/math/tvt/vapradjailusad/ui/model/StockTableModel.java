@@ -4,6 +4,8 @@ import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
 
+import ee.ut.math.tvt.vapradjailusad.domain.data.Order;
+import ee.ut.math.tvt.vapradjailusad.domain.data.SoldItem;
 import ee.ut.math.tvt.vapradjailusad.domain.data.StockItem;
 
 /**
@@ -55,6 +57,18 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		fireTableDataChanged();
 	}
 
+	/** Decreases item amounts based on the order. */
+	public void decreaseItems(Order order) {
+		for(SoldItem item : order.getSoldItems()) {
+			for(StockItem row : rows) {
+				if(row.getName().equals(item.getName())) {
+					row.setQuantity(row.getQuantity() - item.getQuantity());
+					break;
+				}
+			}
+		}
+	}
+	
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();

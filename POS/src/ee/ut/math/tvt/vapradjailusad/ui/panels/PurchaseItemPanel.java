@@ -198,7 +198,7 @@ public class PurchaseItemPanel extends JPanel {
             }
         }
     }
-
+    
     /**
      * Sets whether or not this component is enabled.
      */
