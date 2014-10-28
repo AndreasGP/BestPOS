@@ -69,6 +69,15 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		}
 	}
 	
+	public boolean containsId(Long id) {
+		for(StockItem item : rows) {
+			if(item.getId().equals(id)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
