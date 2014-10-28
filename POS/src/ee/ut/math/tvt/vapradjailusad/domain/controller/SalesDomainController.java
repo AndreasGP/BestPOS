@@ -5,6 +5,7 @@ import java.util.List;
 import ee.ut.math.tvt.vapradjailusad.domain.data.SoldItem;
 import ee.ut.math.tvt.vapradjailusad.domain.data.StockItem;
 import ee.ut.math.tvt.vapradjailusad.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
 
 
 /**
@@ -12,7 +13,7 @@ import ee.ut.math.tvt.vapradjailusad.domain.exception.VerificationFailedExceptio
  * processes.
  */
 public interface SalesDomainController {
-
+	
     /**
      * Load the current state of the warehouse.
      * 
@@ -43,7 +44,7 @@ public interface SalesDomainController {
      *            Goods that the buyer has chosen to buy.
      * @throws VerificationFailedException
      */
-    public void submitCurrentPurchase(List<SoldItem> goods)
+    public void submitCurrentPurchase(SalesSystemModel model, List<SoldItem> goods)
             throws VerificationFailedException;
 
     

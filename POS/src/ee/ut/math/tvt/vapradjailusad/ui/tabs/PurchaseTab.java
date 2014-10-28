@@ -45,8 +45,7 @@ public class PurchaseTab {
   private PurchaseItemPanel purchasePane;
 
   private SalesSystemModel model;
-
-
+  
   public PurchaseTab(SalesDomainController controller,
       SalesSystemModel model)
   {
@@ -118,7 +117,7 @@ public class PurchaseTab {
     JButton b = new JButton("Confirm");
     b.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        submitPurchaseButtonClicked();
+        confirmPurchaseButtonClicked();
       }
     });
     b.setEnabled(false);
@@ -172,16 +171,13 @@ public class PurchaseTab {
       log.error(e1.getMessage());
     }
   }
-
-
+  
   /** Event handler for the <code>submit purchase</code> event. */
   protected void submitPurchaseButtonClicked() {
     log.info("Sale complete");
-    confirmMessage();
     try {
       log.debug("Contents of the current basket:\n" + model.getCurrentPurchaseTableModel());
-      domainController.submitCurrentPurchase(
-          model.getCurrentPurchaseTableModel().getTableRows()
+      domainController.submitCurrentPurchase(model, model.getCurrentPurchaseTableModel().getTableRows()
       );
       endSale();
       model.getCurrentPurchaseTableModel().clear();
@@ -190,19 +186,19 @@ public class PurchaseTab {
     }
   }
   
-  protected void confirmMessage() {
+  protected void confirmPurchaseButtonClicked() {
 	final float sum = calculateSum();
 	
-	final JTextField amount = new JTextField(5);
-	final JPanel panel = new JPanel();
-	panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-    panel.add(new JLabel("Total amount: " + sum + "\n"));
-    panel.add(new JLabel("Payment amount: "));
-    panel.add(amount);
+	final JTextField paymentAmount = new JTextField(5);
+	final JPanel paymentConfirmationPanel = new JPanel();
+	paymentConfirmationPanel.setLayout(new BoxLayout(paymentConfirmationPanel, BoxLayout.PAGE_AXIS));
+    paymentConfirmationPanel.add(new JLabel("Total amount: " + sum + "\n"));
+    paymentConfirmationPanel.add(new JLabel("Payment amount: "));
+    paymentConfirmationPanel.add(paymentAmount);
     final StringBuilder input = new StringBuilder();
-    input.append("0");
-    final JLabel changeAmount = new JLabel("Change amount: " + (Float.parseFloat(input.toString()) - sum));
-    amount.getDocument().addDocumentListener(new DocumentListener() {
+    input.append(".");
+    final JLabel changeAmount = new JLabel("Change amount: -");
+    paymentAmount.getDocument().addDocumentListener(new DocumentListener() {
 		
 		@Override
 		public void changedUpdate(DocumentEvent e) {
@@ -212,19 +208,19 @@ public class PurchaseTab {
 		@Override
 		public void insertUpdate(DocumentEvent e) {
 			try{
-            	if (Integer.parseInt(amount.getText())<=0){
+            	if (Integer.parseInt(paymentAmount.getText())<=0){
             		JOptionPane.showMessageDialog(new JFrame(), "Amount must be positive");
             	}
             	else {
             		input.delete(0, input.length());
-            		input.append(amount.getText());
+            		input.append(paymentAmount.getText());
             		changeAmount.setText("Change amount: " + (Float.parseFloat(input.toString()) - sum));
-            		panel.add(changeAmount);
+            		paymentConfirmationPanel.add(changeAmount);
             	}
             }
             catch (NumberFormatException nfe) {
-            	nfe.printStackTrace();
-            	JOptionPane.showMessageDialog(new JFrame(), "Invalid number");
+            	changeAmount.setText("Change amount: -");
+            	JOptionPane.showMessageDialog(new JFrame(), "Invalid number. Make sure you use a dot, not a coma.");
             } 
 		}
 
@@ -233,21 +229,21 @@ public class PurchaseTab {
 			insertUpdate(e);
 		}
 	});
-    panel.add(Box.createHorizontalStrut(15));
-    panel.add(changeAmount);
+    paymentConfirmationPanel.add(Box.createHorizontalStrut(15));
+    paymentConfirmationPanel.add(changeAmount);
     
     JFrame frame = new JFrame();
     String[] options = new String[2];
     options[0] = new String("Accept");
     options[1] = new String("Cancel");
-    int result = JOptionPane.showOptionDialog(frame.getContentPane(),panel,
+    int result = JOptionPane.showOptionDialog(frame.getContentPane(),paymentConfirmationPanel,
     		"Confirmation", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
-    System.out.println(result);
     if (result == 0) {
-    	System.out.println("Accepted");
+    	log.info("Accepted payment.");
+    	submitPurchaseButtonClicked();
     }
     else {
-    	System.out.println("Cancelled");
+    	log.info("Cancelled payment.");
     }
   }
   
