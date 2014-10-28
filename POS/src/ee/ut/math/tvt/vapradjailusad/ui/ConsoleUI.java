@@ -32,9 +32,9 @@ public class ConsoleUI {
 
 	private List<StockItem> warehouse;
 
-	public ConsoleUI(SalesDomainController domainController, SalesSystemModel model) {
+	public ConsoleUI(SalesDomainController domainController) {
 		this.dc = domainController;
-		this.model = model;
+		this.model = new SalesSystemModel(domainController);
 
 		cart = new ArrayList<StockItem>();
 		warehouse = new ArrayList<StockItem>();
