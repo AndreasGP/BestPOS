@@ -13,6 +13,7 @@ import ee.ut.math.tvt.vapradjailusad.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.vapradjailusad.domain.data.SoldItem;
 import ee.ut.math.tvt.vapradjailusad.domain.data.StockItem;
 import ee.ut.math.tvt.vapradjailusad.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
 
 
 
@@ -24,13 +25,16 @@ public class ConsoleUI {
 	private static final Logger log = Logger.getLogger(ConsoleUI.class);
 
 	private final SalesDomainController dc;
+	
+	private final SalesSystemModel model;
 
 	private List<StockItem> cart;
 
 	private List<StockItem> warehouse;
 
-	public ConsoleUI(SalesDomainController domainController) {
+	public ConsoleUI(SalesDomainController domainController, SalesSystemModel model) {
 		this.dc = domainController;
+		this.model = model;
 
 		cart = new ArrayList<StockItem>();
 		warehouse = new ArrayList<StockItem>();
@@ -119,7 +123,7 @@ public class ConsoleUI {
 			    for(StockItem stockItem : cart) {
 			        soldItems.add(new SoldItem(stockItem, stockItem.getQuantity()));
 			    }
-				dc.submitCurrentPurchase(soldItems);
+				dc.submitCurrentPurchase(model, soldItems);
 				cart.clear();
 			} catch (VerificationFailedException e) {
 				log.error(e.getMessage());
