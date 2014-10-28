@@ -189,7 +189,7 @@ public class PurchaseItemPanel extends JPanel {
             } catch (NumberFormatException ex) {
                 quantity = 1;
             }
-            if (stockItem.getQuantity() < quantity) {
+            if (stockItem.getQuantity() < quantity + getAmountOfItem(stockItem)) {
             	JOptionPane.showMessageDialog(new JFrame(), "Warehouse doesn't have enough items!");
             }
             else {
@@ -197,6 +197,16 @@ public class PurchaseItemPanel extends JPanel {
                 	.addItem(new SoldItem(stockItem, quantity));          	
             }
         }
+    }
+    
+    private int getAmountOfItem (StockItem item) {
+    	int amount = 0;
+    	for (int i = 0; i < model.getCurrentPurchaseTableModel().getRowCount(); i++) {
+    		if (model.getCurrentPurchaseTableModel().getValueAt(i, 1) == item.getName()) {
+    			amount += Integer.parseInt(model.getCurrentPurchaseTableModel().getValueAt(i, 3).toString());
+    		}
+    	}
+    	return amount;
     }
     
     /**

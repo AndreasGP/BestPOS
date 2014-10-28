@@ -220,6 +220,7 @@ public class PurchaseTab {
             }
             catch (NumberFormatException nfe) {
             	changeAmount.setText("Change amount: -");
+            	paymentAmount.setText("");
             	JOptionPane.showMessageDialog(new JFrame(), "Invalid number. Make sure you use a dot, not a coma.");
             } 
 		}
