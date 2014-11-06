@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 import ee.ut.math.tvt.vapradjailusad.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.vapradjailusad.domain.data.Order;
 import ee.ut.math.tvt.vapradjailusad.domain.data.SoldItem;
@@ -53,5 +54,9 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		dataset.add(beer);
 
 		return dataset;
+	}
+	
+	public void endSession() {
+	    HibernateUtil.closeSession();
 	}
 }

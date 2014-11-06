@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
 
+import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 import ee.ut.math.tvt.vapradjailusad.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
 import ee.ut.math.tvt.vapradjailusad.ui.tabs.HistoryTab;
@@ -38,6 +39,8 @@ public class SalesSystemUI extends JFrame {
   private PurchaseTab purchaseTab;
   private HistoryTab historyTab;
   private StockTab stockTab;
+  
+  
 
   /**
    * Constructs sales system GUI.
@@ -74,6 +77,7 @@ public class SalesSystemUI extends JFrame {
     addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
+    	endSession();
         System.exit(0);
       }
     });
@@ -92,6 +96,10 @@ public class SalesSystemUI extends JFrame {
   public PurchaseTab getPurchaseTab() {
 	  return purchaseTab;
   }
+  
+  public void endSession() {
+	    HibernateUtil.closeSession();
+	}
 }
 
 

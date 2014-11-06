@@ -46,6 +46,9 @@ public interface SalesDomainController {
      */
     public void submitCurrentPurchase(SalesSystemModel model, List<SoldItem> goods)
             throws VerificationFailedException;
+    
+    
+    public void endSession();
 
     
 }
