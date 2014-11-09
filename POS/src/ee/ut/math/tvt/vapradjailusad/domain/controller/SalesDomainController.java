@@ -50,5 +50,7 @@ public interface SalesDomainController {
     
     public void endSession();
 
+	public void addItem(StockItem item);
+
     
 }

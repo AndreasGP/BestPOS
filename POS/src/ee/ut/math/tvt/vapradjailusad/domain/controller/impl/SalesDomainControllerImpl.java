@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 import ee.ut.math.tvt.vapradjailusad.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.vapradjailusad.domain.data.Order;
@@ -19,6 +22,8 @@ import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
  * Implementation of the sales domain controller.
  */
 public class SalesDomainControllerImpl implements SalesDomainController {
+	
+	private final Session currentSession = HibernateUtil.currentSession();
 
 	public void submitCurrentPurchase(SalesSystemModel model, List<SoldItem> goods) throws VerificationFailedException {
 		Order order = new Order(
@@ -39,24 +44,25 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		// XXX - Start new purchase
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<StockItem> loadWarehouseState() {
-		// XXX mock implementation
-		List<StockItem> dataset = new ArrayList<StockItem>();
+		
+		return currentSession.createQuery("from StockItem").list();
 
-		StockItem chips = new StockItem(1l, "Lays chips", "Potato chips", 11.0, 5);
-		StockItem chupaChups = new StockItem(2l, "Chupa-chups", "Sweets", 8.0, 8);
-		StockItem frankfurters = new StockItem(3l, "Frankfurters", "Beer sauseges", 15.0, 12);
-		StockItem beer = new StockItem(4l, "Free Beer", "Student's delight", 0.0, 100);
-
-		dataset.add(chips);
-		dataset.add(chupaChups);
-		dataset.add(frankfurters);
-		dataset.add(beer);
-
-		return dataset;
 	}
 	
 	public void endSession() {
 	    HibernateUtil.closeSession();
+	}
+
+	@Override
+	public void addItem(StockItem item) {
+		
+		Transaction transaction = null;
+		transaction = currentSession.beginTransaction();
+		currentSession.merge(item);
+		currentSession.flush();
+		transaction.commit();
+		
 	}
 }

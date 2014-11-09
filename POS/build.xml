@@ -63,9 +63,12 @@
 		<copy todir="${build.dir}">
    		 <fileset dir=""
              includes="**/*.properties,**/*.jpg,**/*.jar" excludes="**build/**" />
-   		 <fileset dir="${basedir}/conf"
-   		     includes="**/*.xml" />
+   		 
 		</copy>
+		<copy todir="${build.dir}">
+		    <fileset dir="./src"
+   		     includes="**/*.xml" />
+		 </copy>
 		<javac
             srcdir="src"
             destdir="${build.dir}"

@@ -22,6 +22,8 @@ import javax.swing.table.JTableHeader;
 
 import org.apache.log4j.Logger;
 
+import ee.ut.math.tvt.vapradjailusad.domain.controller.SalesDomainController;
+import ee.ut.math.tvt.vapradjailusad.domain.controller.impl.SalesDomainControllerImpl;
 import ee.ut.math.tvt.vapradjailusad.domain.data.StockItem;
 import ee.ut.math.tvt.vapradjailusad.ui.SalesSystemUI;
 import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
@@ -36,10 +38,13 @@ public class StockTab {
 	private final SalesSystemModel model;
 	
 	private final SalesSystemUI salesSystem;
+	
+	private final SalesDomainController dc;
 
-	public StockTab(SalesSystemUI salesSystem, SalesSystemModel model) {
+	public StockTab(SalesSystemUI salesSystem, SalesSystemModel model, SalesDomainController dc) {
 		this.salesSystem = salesSystem;
 		this.model = model;
+		this.dc = dc;
 	}
 
 	// warehouse stock tab - consists of a menu and a table
@@ -193,6 +198,7 @@ public class StockTab {
 
 				StockItem item = new StockItem(id, name, description, price, quantity);
 				model.getWarehouseTableModel().addItem(item);
+				dc.addItem(item);
 				
 				salesSystem.getPurchaseTab().updateBarcodes();
 			}

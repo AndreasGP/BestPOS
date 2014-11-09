@@ -22,6 +22,10 @@ public class SoldItem implements Cloneable, DisplayableItem {
     private Long id;
 	
 	@OneToOne
+	@JoinColumn(name="ORDER", nullable = false)
+    private Order order;
+	
+	@OneToOne
 	@JoinColumn(name="STOCKITEM_ID", nullable = false)
     private StockItem stockItem;
     
