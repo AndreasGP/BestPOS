@@ -177,7 +177,7 @@ public class StockTab {
 			
 			double price = 0;
 			try {
-				price = Double.parseDouble(quantityTextField.getText());
+				price = Double.parseDouble(priceTextField.getText());
 			} catch (NumberFormatException nfe) {
 				JOptionPane.showMessageDialog(new JFrame(), "Invalid price. Make sure you use . instead of ,");
 				success = false;

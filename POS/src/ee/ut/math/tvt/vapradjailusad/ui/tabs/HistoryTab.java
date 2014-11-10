@@ -90,6 +90,7 @@ public class HistoryTab {
 	
 	/** Shows the detailed view for the given row. */
 	private void showDetails(int row) {
+		
 		Order order = model.getHistoryTableModel().getTableRows().get(row);
 		
 		String[][] values = new String[order.getSoldItems().size()][4];
@@ -111,4 +112,6 @@ public class HistoryTab {
         JOptionPane.showMessageDialog(null, scrollpane, "Order "+Integer.toString(row+1)+" details", JOptionPane.PLAIN_MESSAGE);
 		
 	}
+	
+	
 }

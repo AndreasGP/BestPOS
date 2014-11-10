@@ -10,6 +10,8 @@ import javax.persistence.*;
 @Table(name="STOCKITEM")
 public class StockItem implements Cloneable, DisplayableItem {
 	
+	
+	
 	@Id
 	 @Column(name = "ID", nullable = false)
 	 private Long id;

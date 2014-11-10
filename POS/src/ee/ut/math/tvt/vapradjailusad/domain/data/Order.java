@@ -12,24 +12,23 @@ import javax.persistence.Table;
 @Table(name = "ORDER")
 public class Order implements DisplayableItem {
 
-	private static long globalIdIndex = 1;
+	public static long globalIdIndex = 1;
 	
 	@Id
 	@Column(name = "ID", nullable = false)
-	private final Long id;
-	
-	@Column(name = "date")
-	private final String date;
-	
-	@Column(name = "time")
-	private final String time;
-	
-	@OneToMany(mappedBy = "order")
-	private final List<SoldItem> soldItems;
-	//Using a double as a price breaks the table view for some reason, no time to fix in initial release.
+	private  Long id;
 	
 	@Column(name = "price")
-	private final int price;
+	private int price;
+	
+	@Column(name = "date")
+	private  String date;
+	
+	@Column(name = "time")
+	private  String time;
+	
+	@OneToMany(mappedBy = "order")
+	private  List<SoldItem> soldItems;	
 
 	public Order(String date, String time, List<SoldItem> soldItems) {
 		this.date = date;
@@ -41,6 +40,9 @@ public class Order implements DisplayableItem {
 			sum += item.getSum();
 		}
 		price = (int)sum;
+	}
+	
+	public Order() {
 	}
 
 	@Override

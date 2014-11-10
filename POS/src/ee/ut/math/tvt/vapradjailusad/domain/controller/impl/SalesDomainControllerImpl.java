@@ -22,15 +22,30 @@ import ee.ut.math.tvt.vapradjailusad.ui.model.SalesSystemModel;
  * Implementation of the sales domain controller.
  */
 public class SalesDomainControllerImpl implements SalesDomainController {
-	
+
 	private final Session currentSession = HibernateUtil.currentSession();
 
 	public void submitCurrentPurchase(SalesSystemModel model, List<SoldItem> goods) throws VerificationFailedException {
+
+		 Transaction transaction = currentSession.beginTransaction();
+
 		Order order = new Order(
 				((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()),
 				((DateFormat)new SimpleDateFormat("HH:mm:ss")).format(Calendar.getInstance().getTime()),
 				goods
 				);
+
+		
+		for(SoldItem si : goods) {
+			//System.out.println(si.getOrder());
+			currentSession.persist(si);
+			si.setOrder(order);
+		}
+			
+		currentSession.merge(order);
+		currentSession.flush();
+		
+		transaction.commit();
 		model.getWarehouseTableModel().decreaseItems(order);
 		model.getHistoryTableModel().addOrder(order);
 	}
@@ -46,23 +61,40 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 	@SuppressWarnings("unchecked")
 	public List<StockItem> loadWarehouseState() {
-		
+
 		return currentSession.createQuery("from StockItem").list();
 
 	}
-	
+
 	public void endSession() {
-	    HibernateUtil.closeSession();
+		HibernateUtil.closeSession();
 	}
 
 	@Override
 	public void addItem(StockItem item) {
-		
+
 		Transaction transaction = null;
 		transaction = currentSession.beginTransaction();
 		currentSession.merge(item);
 		currentSession.flush();
 		transaction.commit();
-		
+
+	}
+
+	@Override
+	public List<Order> loadHistoryTableState() {
+
+		if(currentSession.createSQLQuery("SELECT MAX(ID) FROM ORDER").list().get(0) == null) {
+			Order.globalIdIndex = 1;
+			SoldItem.soldItemIndex = 1;
+		} else {
+			int id = (Integer) currentSession.createSQLQuery("SELECT MAX(ID) FROM ORDER").list().get(0);
+			int soldId = (Integer) currentSession.createSQLQuery("SELECT MAX(ID) FROM SOLDITEM").list().get(0);
+			System.out.println("Setting starting id to " + id);
+			Order.globalIdIndex = id + 1;
+			SoldItem.soldItemIndex = id + 1;
+			}
+		List query  = currentSession.createQuery("from Order").list();
+		return query;
 	}
 }
