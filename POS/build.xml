@@ -45,7 +45,7 @@
  	</path>
 	
     <path id="run.classpath">
-        <pathelement location="${build.classes.dir}"/>
+        <pathelement location="${build.dir}"/>
         <!-- configuration -->
         <pathelement location="${conf.dir}"/>
         <fileset dir="${lib.dir}">
@@ -121,7 +121,7 @@
   
   <target name="run" depends="build">
 
-		<java classname="ee.ut.math.tvt.vapradjailusad.Intro" classpathref="test.classpath" fork="yes" />
+		<java classname="ee.ut.math.tvt.vapradjailusad.Intro" classpathref="run.classpath" fork="yes" />
 	</target>
 	
   
