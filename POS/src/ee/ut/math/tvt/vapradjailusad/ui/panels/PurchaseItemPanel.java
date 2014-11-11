@@ -193,8 +193,13 @@ public class PurchaseItemPanel extends JPanel {
             	JOptionPane.showMessageDialog(new JFrame(), "Warehouse doesn't have enough items!");
             }
             else {
-            	model.getCurrentPurchaseTableModel()
-                	.addItem(new SoldItem(stockItem, quantity));          	
+                if (quantity < 1) {
+                	JOptionPane.showMessageDialog(new JFrame(), "Amount must be positive");
+                }
+                else {
+                	model.getCurrentPurchaseTableModel()
+                    	.addItem(new SoldItem(stockItem, quantity)); 
+                }         	
             }
         }
     }
