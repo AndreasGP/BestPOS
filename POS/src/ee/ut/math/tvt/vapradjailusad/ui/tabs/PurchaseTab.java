@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -212,10 +213,15 @@ public class PurchaseTab {
             		JOptionPane.showMessageDialog(new JFrame(), "Amount must be positive");
             	}
             	else {
-            		input.delete(0, input.length());
-            		input.append(paymentAmount.getText());
-            		changeAmount.setText("Change amount: " + (Float.parseFloat(input.toString()) - sum));
-            		paymentConfirmationPanel.add(changeAmount);
+            		if (Integer.parseInt(paymentAmount.getText()) < sum) {
+            			JOptionPane.showMessageDialog(new JFrame(), "Amount must exceed or equal the total amount");
+            		}
+            		else {
+                		input.delete(0, input.length());
+                		input.append(paymentAmount.getText());
+                		changeAmount.setText("Change amount: " + (Float.parseFloat(input.toString()) - sum));
+                		paymentConfirmationPanel.add(changeAmount);
+            		}
             	}
             }
             catch (NumberFormatException nfe) {
