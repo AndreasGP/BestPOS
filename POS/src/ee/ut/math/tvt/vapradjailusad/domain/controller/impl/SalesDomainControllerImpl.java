@@ -40,17 +40,18 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 
 		for(SoldItem si : goods) {
+			
 			currentSession.persist(si);
 			si.setOrder(order);
 			
 			//Decrease stockitem's quantity
-			Query query = currentSession.createQuery("UPDATE StockItem set QUANTITY = QUANTITY - :kogus"  + 
-					" WHERE ID = :solditem_id");
+			Query query = currentSession.createQuery("UPDATE StockItem set QUANTITY = QUANTITY - :kogus WHERE ID = :solditem_id");
 			query.setParameter("kogus", si.getQuantity());
 			query.setParameter("solditem_id", si.getStockItem().getId());
+			query.executeUpdate();
 		}
 
-		currentSession.merge(order);
+		currentSession.persist(order);
 		currentSession.flush();
 
 		transaction.commit();
@@ -105,7 +106,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 			int soldId = (Integer) currentSession.createSQLQuery("SELECT MAX(ID) FROM SOLDITEM").list().get(0);
 			System.out.println("Setting starting id to " + id);
 			Order.globalIdIndex = id + 1;
-			SoldItem.soldItemIndex = id + 1;
+			SoldItem.soldItemIndex = soldId + 1;
 		}
 		List query  = currentSession.createQuery("from Order").list();
 		return query;

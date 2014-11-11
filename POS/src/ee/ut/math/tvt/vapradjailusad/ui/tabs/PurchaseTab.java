@@ -209,22 +209,25 @@ public class PurchaseTab {
 		@Override
 		public void insertUpdate(DocumentEvent e) {
 			try{
-            	if (Integer.parseInt(paymentAmount.getText())<=0){
-            		JOptionPane.showMessageDialog(new JFrame(), "Amount must be positive");
-            	}
-            	else {
-            		if (Integer.parseInt(paymentAmount.getText()) < sum) {
-            			JOptionPane.showMessageDialog(new JFrame(), "Amount must exceed or equal the total amount");
-            		}
-            		else {
-                		input.delete(0, input.length());
+				if(paymentAmount.getText().equals("") == false) {
+					if (Integer.parseInt(paymentAmount.getText())<=0){
+						JOptionPane.showMessageDialog(new JFrame(), "Amount must be positive");
+					} else {
+						input.delete(0, input.length());
                 		input.append(paymentAmount.getText());
                 		changeAmount.setText("Change amount: " + (Float.parseFloat(input.toString()) - sum));
                 		paymentConfirmationPanel.add(changeAmount);
-            		}
+				}
+            	
+//            		if (Integer.parseInt(paymentAmount.getText()) < sum) {
+//            			JOptionPane.showMessageDialog(new JFrame(), "Amount must exceed or equal the total amount");
+//            		}
+//            		else {
+                		
+            		//}
             	}
             }
-            catch (NumberFormatException nfe) {
+            catch (NumberFormatException  | IllegalStateException nfe) {
             	changeAmount.setText("Change amount: -");
             	paymentAmount.setText("");
             	JOptionPane.showMessageDialog(new JFrame(), "Invalid number. Make sure you use a dot, not a coma.");
@@ -243,11 +246,18 @@ public class PurchaseTab {
     String[] options = new String[2];
     options[0] = new String("Accept");
     options[1] = new String("Cancel");
+
     int result = JOptionPane.showOptionDialog(frame.getContentPane(),paymentConfirmationPanel,
     		"Confirmation", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
     if (result == 0) {
-    	log.info("Accepted payment.");
-    	submitPurchaseButtonClicked();
+    	
+    	if(changeAmount.getText().contains("-")) {
+    		log.info("Payment not accepted!");
+    	} else {
+    		log.info("Accepted payment.");
+        	submitPurchaseButtonClicked();
+    	}
+    	
     }
     else {
     	log.info("Cancelled payment.");

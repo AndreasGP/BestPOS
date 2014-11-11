@@ -2,8 +2,10 @@ package ee.ut.math.tvt.vapradjailusad.domain.data;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,7 +29,7 @@ public class Order implements DisplayableItem {
 	@Column(name = "time")
 	private  String time;
 	
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private  List<SoldItem> soldItems;	
 
 	public Order(String date, String time, List<SoldItem> soldItems) {

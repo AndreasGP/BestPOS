@@ -1,10 +1,13 @@
 package ee.ut.math.tvt.vapradjailusad.domain.data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,10 +24,10 @@ public class SoldItem implements Cloneable, DisplayableItem {
 	public static long soldItemIndex = 1;
 	
 	@Id
-	 @Column(name = "ID", nullable = false)
+	@Column(name = "ID", nullable = false)
     private Long id;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="ORDER_ID", nullable = false)
     private Order order;
 	
@@ -42,7 +45,7 @@ public class SoldItem implements Cloneable, DisplayableItem {
     private double price;
     
     public SoldItem() {
-    	
+
     }
     
     public SoldItem(StockItem stockItem, int quantity) {
