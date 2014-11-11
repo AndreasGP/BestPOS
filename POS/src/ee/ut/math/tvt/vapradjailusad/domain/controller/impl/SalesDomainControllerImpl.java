@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -27,7 +30,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 	public void submitCurrentPurchase(SalesSystemModel model, List<SoldItem> goods) throws VerificationFailedException {
 
-		 Transaction transaction = currentSession.beginTransaction();
+		Transaction transaction = currentSession.beginTransaction();
 
 		Order order = new Order(
 				((DateFormat)new SimpleDateFormat("yyyy/MM/dd")).format(Calendar.getInstance().getTime()),
@@ -35,16 +38,21 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 				goods
 				);
 
-		
+
 		for(SoldItem si : goods) {
-			//System.out.println(si.getOrder());
 			currentSession.persist(si);
 			si.setOrder(order);
-		}
 			
+			//Decrease stockitem's quantity
+			Query query = currentSession.createQuery("UPDATE StockItem set QUANTITY = QUANTITY - :kogus"  + 
+					" WHERE ID = :solditem_id");
+			query.setParameter("kogus", si.getQuantity());
+			query.setParameter("solditem_id", si.getStockItem().getId());
+		}
+
 		currentSession.merge(order);
 		currentSession.flush();
-		
+
 		transaction.commit();
 		model.getWarehouseTableModel().decreaseItems(order);
 		model.getHistoryTableModel().addOrder(order);
@@ -63,6 +71,11 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	public List<StockItem> loadWarehouseState() {
 
 		return currentSession.createQuery("from StockItem").list();
+
+	}
+
+	public void updateWarehouseState() {
+
 
 	}
 
@@ -93,7 +106,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 			System.out.println("Setting starting id to " + id);
 			Order.globalIdIndex = id + 1;
 			SoldItem.soldItemIndex = id + 1;
-			}
+		}
 		List query  = currentSession.createQuery("from Order").list();
 		return query;
 	}
