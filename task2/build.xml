@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="POS">
+
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <property name="version.properties" value="build/version.properties" />
+    
+    <property name="build.dir" value="${basedir}/build"/>
+	<property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="dist.dir" value="${basedir}/dist"/>
+	
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="lib.hibernate.dir"   value="${lib.dir}/hibernate"/>
+    
+    <property name="data.dir"	value="${basedir}/data"/>
+	<property name="db.file"	value="${data.dir}/POSdb"/>
+	<property name="db.alias"	value="POS"/>
+	<property name="db.url" 	value="jdbc:hsqldb:hsql://localhost/POS"/>
+    
+    <path id="POS.classpath">
+        <fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+    </path>
+    
+    <path id="test.classpath">
+		<pathelement location="${build.dir}"/>
+		<!-- configuration -->
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+
+        <fileset dir="${lib.hibernate.dir}">
+             <include name="*.jar"/>
+        </fileset>
+ 	</path>
+	
+    <path id="run.classpath">
+        <pathelement location="${build.dir}"/>
+        <!-- configuration -->
+        <pathelement location="${conf.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+
+        <fileset dir="${lib.hibernate.dir}">
+             <include name="*.jar"/>
+        </fileset>
+	</path>
+    
+    
+    	<target name="build" description="Build the system">
+		<mkdir dir="${build.dir}"/>
+		<copy todir="${build.dir}">
+   		 <fileset dir=""
+             includes="**/*.properties,**/*.jpg,**/*.jar" excludes="**build/**" />
+   		 
+		</copy>
+		<copy todir="${build.dir}">
+		    <fileset dir="./src"
+   		     includes="**/*.xml" />
+		 </copy>
+		<javac
+            srcdir="src"
+            destdir="${build.dir}"
+            debug="true"
+            debuglevel="lines,vars,source"
+            encoding="utf-8"
+            compiler="modern"
+            target="1.7"
+            source="1.7"
+			includeantruntime="false">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		
+
+	</target>
+   
+ 
+  
+  
+  <target name="dist" depends="build"
+        description="generate the distribution" >
+    
+      <propertyfile
+    file="build/version.properties">
+  <entry key="build.revision.number" type="int" default="0" operation="+"/>
+  </propertyfile>
+  
+      <property file="${version.properties}" />
+    <propertyfile
+   	file="build/version.properties">
+  <entry key="build.number" value="${build.major.number}.${build.minor.number}.${build.revision.number}" />
+	</propertyfile>
+	
+       <delete dir="build/jar"/>
+    <jar jarfile="build/jar/vapradjailusad.jar">
+        
+     <fileset dir="${build.dir}"/>
+     <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
+     <zipgroupfileset dir="${lib.hibernate.dir}" includes="*.jar"/>
+
+    
+    <manifest>
+      <attribute name="Main-Class"
+            value="ee.ut.math.tvt.vapradjailusad.Intro"/>
+    </manifest>
+    
+  </jar>
+
+  </target>
+  
+  <target name="run" depends="build">
+
+		<java classname="ee.ut.math.tvt.vapradjailusad.Intro" classpathref="run.classpath" fork="yes" />
+	</target>
+	
+  
+  <target name="jrun" depends="dist" description="">
+	    <java jar="build/jar/vapradjailusad.jar" fork="true" classpathref="run.classpath"/>
+	</target>
+  
+<target name="runc" depends="build" description="Run the application (console)">
+	<java classname="ee.ut.math.tvt.vapradjailusad.Intro" classpathref="test.classpath" fork="yes">
+		<arg value="console" />
+	</java>
+</target>
+
+<macrodef name = "git">
+    <attribute name = "command" />
+    <attribute name = "dir" default = "" />
+    <element name = "args" optional = "true" />
+    <sequential>
+        <echo message = "git @{command}" />
+        <exec executable = "git" dir = "@{dir}">
+            <arg value = "@{command}" />
+            <args/>
+        </exec>
+    </sequential>
+</macrodef>
+
+
+  <target name="git_commit" description="Commit and push">      
+		
+		<input message="Github username" addproperty="git_username" />
+		<input message="Github password" addproperty="git_password"/>
+		<input message="Message" addproperty="message" />
+		
+		<echo message="Commiting  ${message}" />
+		
+		<git command="add">
+			<args>
+				<arg value="-A" />
+			</args>
+		</git>
+		
+		<git command="commit">
+			<args>
+				<arg value="-m ${message}" />
+			</args>
+		</git>
+		
+		<git command="push" >
+			<args>
+				<arg value="https://${git_username}:${git_password}@github.com/AndreasGP/BestPOS.git"/>
+			</args>
+		</git>
+	</target>
+  
+  <target name="git_tag" description="Creates tag for git">
+      
+		<input message="Tag name" addproperty="name" />
+		<input message="Comment" addproperty="comment" />
+		<input message="Github username" addproperty="username" />
+		<input message="Github password" addproperty="password" />
+		
+		<echo message="Adding tag '${name}'" />
+		
+		<git command="tag">
+			<args>
+				<arg value="-a" />
+				<arg value="${name}" />
+				<arg value="-m ${comment}" />
+			</args>
+		</git>
+		
+		<git command="push" >
+			<args>
+				<arg value="--tags" />
+				<arg value="https://${username}:${password}@github.com/AndreasGP/BestPOS.git"/>
+			</args>
+		</git>
+	</target>
+
+  <target name="clean"
+        description="clean up" >
+
+    <delete dir="${build.dir}"/>
+
+  </target>
+  
+  <target name="dbmanager" description="Start the HSQLDB manager">
+        <java
+            classname="org.hsqldb.util.DatabaseManagerSwing"
+            classpathref="run.classpath"
+            fork="yes"
+        >
+            <arg line="--user sa --url ${db.url}" />
+        </java>
+    </target>
+
+    <target name="startdb" description="Start the HSQLDB with the default params">
+        <java
+            classname="org.hsqldb.Server"
+            classpathref="run.classpath"
+            fork="yes"
+        >
+            <arg line="-database.0 '${db.file}' -dbname.0 '${db.alias}'" /> 
+        </java>
+	</target>
+    
+</project>
