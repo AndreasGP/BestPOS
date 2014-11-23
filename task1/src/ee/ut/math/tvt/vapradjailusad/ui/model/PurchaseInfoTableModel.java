@@ -18,7 +18,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	}
 
 	@Override
-	protected Object getColumnValue(SoldItem item, int columnIndex) {
+	public Object getColumnValue(SoldItem item, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
 			return item.getId();

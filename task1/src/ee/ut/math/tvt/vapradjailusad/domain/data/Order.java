@@ -64,6 +64,15 @@ public class Order implements DisplayableItem {
 		return soldItems;
 	}
 	
+	public void setSoldItems(List<SoldItem> soldItems) {
+		this.soldItems = soldItems;
+		double sum = 0;
+		for(SoldItem item : soldItems) {
+			sum += item.getSum();
+		}
+		price = (int)sum;
+	}
+	
 	public int getPrice() {
 		return price;
 	}

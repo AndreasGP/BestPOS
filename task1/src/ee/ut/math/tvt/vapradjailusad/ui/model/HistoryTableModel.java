@@ -1,5 +1,7 @@
 package ee.ut.math.tvt.vapradjailusad.ui.model;
 
+import java.util.NoSuchElementException;
+
 import org.apache.log4j.Logger;
 
 import ee.ut.math.tvt.vapradjailusad.domain.data.Order;
@@ -16,7 +18,7 @@ public class HistoryTableModel extends SalesSystemTableModel<Order> {
 	}
 
 	@Override
-	protected Object getColumnValue(Order order, int columnIndex) {
+	public Object getColumnValue(Order order, int columnIndex) {
 		
 		switch (columnIndex) {
 		case 0:
@@ -40,6 +42,15 @@ public class HistoryTableModel extends SalesSystemTableModel<Order> {
 		rows.add(order);
 		logger.debug("Added Order with id " + order.getId() + " and timestamp " + order.getDate() + " " + order.getTime());
 		fireTableDataChanged();
+	}
+	
+	public boolean containsOrder(Order order) {
+		
+		if(rows.contains(order)) {
+			return true;
+		} else {
+			throw new NoSuchElementException("No such order");
+		}
 	}
 	
 	@Override

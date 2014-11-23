@@ -48,6 +48,9 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 			item.setQuantity(item.getQuantity() + stockItem.getQuantity());
 			log.debug("Found existing item " + stockItem.getName()
 					+ " increased quantity by " + stockItem.getQuantity());
+			if(item.getName().equals(stockItem.getName()) == false) {
+				throw new IllegalArgumentException("Item with same Id has different name");
+			}
 		}
 		catch (NoSuchElementException e) {
 			rows.add(stockItem);
@@ -62,7 +65,11 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		for(SoldItem item : order.getSoldItems()) {
 			for(StockItem row : rows) {
 				if(row.getName().equals(item.getName())) {
+					if(row.getQuantity() - item.getQuantity() < 0) {
+						throw new IllegalArgumentException("Not enough stock to fill order");
+					}
 					row.setQuantity(row.getQuantity() - item.getQuantity());
+					
 					break;
 				}
 			}
@@ -75,7 +82,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 				return true;
 			}
 		}
-		return false;
+		throw new NoSuchElementException();
 	}
 	
 	@Override
