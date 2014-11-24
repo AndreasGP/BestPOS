@@ -181,6 +181,7 @@ public class PurchaseTab {
 		domainController.registerSale(currentSale);
 		endSale();
 		model.getCurrentPurchaseTableModel().clear();
+		model.getCurrentPurchaseTableModel().resetSale();
     }
 
     public void cancelPaying() {

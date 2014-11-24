@@ -147,6 +147,11 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
     public Sale getSale() {
     	return sale;
     }
+    
+    public void resetSale() {
+    	
+    	 sale = new Sale();
+    }
 
 	@Override
 	 public List<SoldItem> getTableRows() {

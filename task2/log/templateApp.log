@@ -1,11 +1,20 @@
-2009-10-18 16:20:54,517 [main] DEBUG - Strating SalesSystem with the Swing UI ..
-2009-10-18 16:20:54,985 [main] INFO - 4 items loaded from disk
-2009-10-18 16:20:55,001 [main] INFO - 1 clients loaded from disk
-2009-10-18 16:20:55,016 [main] INFO - 7 Sales loaded from disk
-2009-10-18 16:20:55,859 [main] INFO - SalesSystem started
-2009-10-18 16:22:11,270 [AWT-EventQueue-0] DEBUG -  === Comparing: kohv vs. Layz krõpsud
-2009-10-18 16:22:11,270 [AWT-EventQueue-0] DEBUG -  === Comparing: kohv vs. Õlle vorstikesed
-2009-10-18 16:22:11,270 [AWT-EventQueue-0] DEBUG -  === Comparing: kohv vs. Pähklid
-2009-10-18 16:22:11,286 [AWT-EventQueue-0] DEBUG -  === Comparing: kohv vs. Kõrsikud 
-2009-10-18 16:22:11,332 [AWT-EventQueue-0] INFO - Added new stockItem : kohv
-2009-10-18 16:22:16,200 [AWT-EventQueue-0] INFO - SalesSystem closed
+2014-11-24 18:46:37,058 [main] DEBUG - Strating SalesSystem with the Swing UI ..
+2014-11-24 18:46:37,333 [main] INFO - 5 items loaded from disk
+2014-11-24 18:46:37,338 [main] INFO - 1 clients loaded from disk
+2014-11-24 18:46:37,343 [main] INFO - 10 Sales loaded from disk
+2014-11-24 18:46:37,541 [main] INFO - SalesSystem started
+2014-11-24 18:46:48,005 [AWT-EventQueue-0] INFO - New sale process started
+2014-11-24 18:46:48,005 [AWT-EventQueue-0] INFO - New purchase started
+2014-11-24 18:46:48,019 [AWT-EventQueue-0] INFO - 1 clients loaded from disk
+2014-11-24 18:46:48,818 [AWT-EventQueue-0] INFO - Client Toomas with ID=1 got selected.
+2014-11-24 18:46:55,485 [AWT-EventQueue-0] INFO - Sale complete
+2014-11-24 18:46:55,485 [AWT-EventQueue-0] DEBUG - Contents of the current basket:
+Id	Name	Price	Quantity	Sum	
+null	Layz krõpsud	10.5	1	10.5	
+
+2014-11-24 18:46:55,485 [AWT-EventQueue-0] INFO - model ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel@1c85b94
+2014-11-24 18:46:55,485 [AWT-EventQueue-0] INFO - modeltable Id	Name	Price	Quantity	Sum	
+null	Layz krõpsud	10.5	1	10.5	
+
+2014-11-24 18:46:56,735 [AWT-EventQueue-0] INFO - 5 items loaded from disk
+2014-11-24 18:47:02,724 [AWT-EventQueue-0] INFO - SalesSystem closed
