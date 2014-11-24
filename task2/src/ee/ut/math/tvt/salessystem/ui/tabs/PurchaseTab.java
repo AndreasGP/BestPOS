@@ -55,7 +55,7 @@ public class PurchaseTab {
         this.model = model;
         this.parent = parent;
     }
-
+    
     /**
      * The purchase tab. Consists of the purchase menu, current purchase dialog
      * and shopping cart table.

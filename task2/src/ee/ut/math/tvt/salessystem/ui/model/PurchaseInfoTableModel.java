@@ -74,16 +74,6 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 
 
 	public SoldItem getForStockItem(long stockItemId) {
-		if(sale == null) {
-			log.log(Priority.ERROR, "Sale is null.");
-		} else {
-			log.log(Priority.ERROR, "Sale is not null.");
-		}
-		if(sale.getSoldItems() == null) {
-			log.log(Priority.ERROR, "sold items is null.");
-		} else {
-			log.log(Priority.ERROR, "sold items is not null.");
-		}
 	    for (SoldItem item : sale.getSoldItems()) {
 	        if (item.getStockItem().getId().equals(stockItemId)) {
 	            return item;
