@@ -1,11 +1,14 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+
 import ee.ut.math.tvt.salessystem.domain.data.Sale;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.SalesSystemException;
-import java.util.ArrayList;
-import org.apache.log4j.Logger;
 
 /**
  * Purchase history details model.
@@ -16,9 +19,12 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	private static final Logger log = Logger.getLogger(PurchaseInfoTableModel.class);
 
 	private SalesSystemModel model;
+	
+	private Sale sale;
 
     public PurchaseInfoTableModel() {
         super(new String[] { "Id", "Name", "Price", "Quantity", "Sum"});
+        sale = new Sale();
     }
 
 	public PurchaseInfoTableModel(SalesSystemModel model) {
@@ -51,7 +57,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 			buffer.append(headers[i] + "\t");
 		buffer.append("\n");
 
-		for (final SoldItem item : rows) {
+		for (final SoldItem item : sale.getSoldItems()) {
 			buffer.append(item.getId() + "\t");
 			buffer.append(item.getName() + "\t");
 			buffer.append(item.getPrice() + "\t");
@@ -65,7 +71,17 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 
 
 	public SoldItem getForStockItem(long stockItemId) {
-	    for (SoldItem item : rows) {
+		if(sale == null) {
+			log.log(Priority.ERROR, "Sale is null.");
+		} else {
+			log.log(Priority.ERROR, "Sale is not null.");
+		}
+		if(sale.getSoldItems() == null) {
+			log.log(Priority.ERROR, "sold items is null.");
+		} else {
+			log.log(Priority.ERROR, "sold items is not null.");
+		}
+	    for (SoldItem item : sale.getSoldItems()) {
 	        if (item.getStockItem().getId().equals(stockItemId)) {
 	            return item;
 	        }
@@ -93,7 +109,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 
         } else {
             validateQuantityInStock(soldItem.getStockItem(), soldItem.getQuantity());
-            rows.add(soldItem);
+            sale.addSoldItem(soldItem);
             log.debug("Added " + soldItem.getName()
                     + " quantity of " + soldItem.getQuantity());
         }
@@ -106,7 +122,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
      */
     public double getTotalPrice() {
         double price = 0.0;
-        for (SoldItem item : rows) {
+        for (SoldItem item : sale.getSoldItems()) {
             price += item.getSum();
         }
         return price;
@@ -134,8 +150,30 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
      * (Used by the history details table in the HistoryTab).
      */
     public void showSale(Sale sale) {
-        this.rows = new ArrayList<SoldItem>(sale.getSoldItems());
+        this.sale = sale;
         fireTableDataChanged();
     }
+
+    public Sale getSale() {
+    	return sale;
+    }
+    
+	@Override
+	public int getRowCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SoldItem> getTableRows() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

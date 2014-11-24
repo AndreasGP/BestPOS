@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,8 +38,12 @@ public class Sale implements DisplayableItem {
     public Sale() {
     }
 
+    public Sale(Client client) {
+		this.client = client;
+	}
+    
     public Sale(List<SoldItem> goods) {
-        this.soldItems = new HashSet<SoldItem>(goods);
+    	this.soldItems = new HashSet<SoldItem>(goods);
         this.sellingTime = new Date();
     }
 

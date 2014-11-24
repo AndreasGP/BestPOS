@@ -45,21 +45,17 @@ public interface SalesDomainController {
      */
     public void cancelCurrentPurchase();
 
-    /**
-     * Commit business transaction - purchase of goods.
-     *
-     * @param goods
-     *            Goods that the buyer has chosen to buy.
-     * @throws VerificationFailedException
-     */
-    public void submitCurrentPurchase(List<SoldItem> goods, Client client)
-            throws VerificationFailedException;
-
-
     public void setModel(SalesSystemModel model);
 
     /**
      * Close all resources
      */
     public void endSession();
+    
+	public void setCurrentSale(Sale currentSale);
+
+	public Sale getCurrentSale();
+
+	/** Registers the sale to the database. */
+	public void registerSale(Sale currentSale);
 }

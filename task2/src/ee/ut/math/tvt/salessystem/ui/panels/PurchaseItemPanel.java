@@ -182,23 +182,9 @@ public class PurchaseItemPanel extends JPanel {
                 quantity = 1;
             }
 
-            // If there is not enough stock left in the warehouse to add this quantity..
-            try {
-                model.getCurrentPurchaseTableModel()
-                    .addItem(new SoldItem(stockItem, quantity));
-            } catch (SalesSystemException e) {
-                showNotEnoughInStockWarning();
-            }
+            model.getCurrentPurchaseTableModel().getSale()
+            .addSoldItem(new SoldItem(stockItem, quantity));
         }
-    }
-
-    private void showNotEnoughInStockWarning() {
-        JOptionPane.showMessageDialog(this,
-                "Not enough stock, decrease amount",
-                "Attention",
-                JOptionPane.WARNING_MESSAGE
-        );
-        logger.debug("  -- there was not enough cargo in warehouse to add item");
     }
 
     /**
