@@ -137,8 +137,6 @@ public class PurchaseItemPanel extends JPanel {
         return panel;
     }
 
-
-
     // Fill dialog with data from the "database".
     public void fillDialogFields() {
         //StockItem stockItem = getStockItemByBarcode();
@@ -185,6 +183,8 @@ public class PurchaseItemPanel extends JPanel {
             
             model.getCurrentPurchaseTableModel().getSale()
             .addSoldItem(new SoldItem(stockItem, quantity));
+            
+            model.getCurrentPurchaseTableModel().fireTableDataChanged();
         }
     }
 
@@ -211,6 +211,7 @@ public class PurchaseItemPanel extends JPanel {
         for(StockItem stockItem : model.getWarehouseTableModel().getTableRows()) {
             ((DefaultComboBoxModel)stockItemSelector.getModel()).addElement(stockItem);
         }
+        
         barCodeField.setText("");
         quantityField.setText("1");
         //nameField.setText("");

@@ -199,7 +199,7 @@ public class PurchaseTab {
     // switch UI to the state that allows to proceed with the purchase
     private void startNewSale() {
         purchasePane.reset();
-
+        
         showSelectClientDialog();
 
         purchasePane.setEnabled(true);
@@ -227,11 +227,11 @@ public class PurchaseTab {
             log.info("No client selected");
         }
         
-        Sale currentSale = new Sale(currentClient);
-        domainController.setCurrentSale(currentSale);
-        
         // update selected client
         model.setSelectedClient(currentClient);
+        
+        Sale currentSale = new Sale(currentClient);
+        domainController.setCurrentSale(currentSale);
     }
 
 
