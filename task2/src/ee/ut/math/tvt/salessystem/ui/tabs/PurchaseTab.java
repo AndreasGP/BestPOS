@@ -174,6 +174,8 @@ public class PurchaseTab {
 		// Filling fields for currentSale
 		Sale currentSale = domainController.getCurrentSale();
 		currentSale.setSellingTime(new Date());
+		log.info("model " + model);
+		log.info("modeltable " + model.getCurrentPurchaseTableModel());
 		currentSale.setSoldItems(new HashSet<SoldItem>(model.getCurrentPurchaseTableModel().getTableRows()));
 		// Registering the sale to the db
 		domainController.registerSale(currentSale);

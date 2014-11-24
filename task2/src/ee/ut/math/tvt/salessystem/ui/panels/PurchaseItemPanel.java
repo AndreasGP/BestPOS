@@ -181,7 +181,8 @@ public class PurchaseItemPanel extends JPanel {
             } catch (NumberFormatException ex) {
                 quantity = 1;
             }
-
+            
+            
             model.getCurrentPurchaseTableModel().getSale()
             .addSoldItem(new SoldItem(stockItem, quantity));
         }

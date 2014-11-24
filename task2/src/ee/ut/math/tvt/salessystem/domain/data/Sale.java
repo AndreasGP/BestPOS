@@ -80,6 +80,10 @@ public class Sale implements DisplayableItem {
     }
 
     public void addSoldItem(SoldItem item) {
+    	
+    	if(soldItems == null) {
+    		soldItems = new HashSet<SoldItem>();
+    	}
         item.setSale(this);
         soldItems.add(item);
     }

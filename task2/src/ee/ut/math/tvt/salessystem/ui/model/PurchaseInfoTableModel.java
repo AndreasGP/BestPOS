@@ -1,6 +1,9 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
@@ -157,23 +160,14 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
     public Sale getSale() {
     	return sale;
     }
-    
-	@Override
-	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<SoldItem> getTableRows() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 public List<SoldItem> getTableRows() {
+	  if (sale.getSoldItems() != null) {
+	   return new ArrayList<SoldItem>(sale.getSoldItems());
+	  } else {
+	   return new ArrayList<SoldItem>();
+	  }
+	 }
 
 }
